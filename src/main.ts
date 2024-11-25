@@ -41,12 +41,19 @@ const renderRadioBox = (language: string) => {
 
 const handleChange = () => {
     const selectedLanguage = getSelectedValue(languageRadios);
-    const selectedLanguageValue = selectedLanguage;
+    renderRadioBox(selectedLanguage);
+
     const selectedDifficulty = getSelectedValue(difficultyRadios);
-    renderRadioBox(selectedLanguageValue);
-    console.log(selectedDifficulty)
     fetchAllData(selectedDifficulty);
 };
+// const handleChange = () => {
+//     const selectedLanguage = getSelectedValue(languageRadios);
+//     const selectedLanguageValue = selectedLanguage;
+//     const selectedDifficulty = getSelectedValue(difficultyRadios);
+//     renderRadioBox(selectedLanguageValue);
+//     console.log(selectedDifficulty)
+//     fetchAllData(selectedDifficulty);
+// };
 
 difficultyRadios.forEach((radio) => radio.addEventListener("change", handleChange));
 languageRadios.forEach((radio) => radio.addEventListener("change", handleChange));
@@ -56,7 +63,7 @@ const fetchAllData = async (url: string) => {
     const response: Response = await fetch(newUrl);
     const data: IQuiz[] = await response.json();
     questions = [...data];
-    console.log(questions)
+    console.log(questions);
     maxQuestions = questions.length;
     renderQuestions();
 };
@@ -67,7 +74,7 @@ const showResult = () => {
     <h2>Ergebnis</h2>
    <p id="total-result">${counterTrueAnswer}/${maxQuestions}</p>
    <button><a href="/">Restart</a></button>
-    `
+    `;
 };
 
 const renderQuestions = () => {
@@ -96,11 +103,11 @@ const renderQuestions = () => {
     submitBtn.addEventListener("click", () => {
         const selectedRadioAnswer = Array.from(answerCollection).find((radio) => radio.checked);
         if (!selectedRadioAnswer) {
-          feedback.textContent = "⛔";
-          return;
-      }
+            feedback.textContent = "⛔";
+            return;
+        }
 
-        answerCollection.forEach(item => item.disabled = true);
+        answerCollection.forEach((item) => (item.disabled = true));
         submitBtn.disabled = true;
         const selectedAnswer = getSelectedValue(answerCollection);
 
@@ -114,14 +121,14 @@ const renderQuestions = () => {
         counterQuestions++;
 
         setTimeout(() => {
-          if(counterQuestions === maxQuestions) {
-            questionContainer.style.display = "none"
-            showResult();
+            if (counterQuestions === maxQuestions) {
+                questionContainer.style.display = "none";
+                showResult();
 
-            return;
-          }
+                return;
+            }
             renderQuestions();
         }, 10);
     });
 };
-fetchAllData("leicht")
+fetchAllData("leicht");
