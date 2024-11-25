@@ -60,9 +60,12 @@ const fetchAllData = async (url: string) => {
 };
 
 const showResult = () => {
-    const resultElement = document.getElementById("total-result") as HTMLParagraphElement;
-
-    resultElement.textContent = `${counterTrueAnswer}/${maxQuestions}`;
+    const resultContainer = document.querySelector(".result-container") as HTMLElement;
+    resultContainer.innerHTML = `
+    <h2>Ergebnis</h2>
+   <p id="total-result">${counterTrueAnswer}/${maxQuestions}</p>
+   <button><a href="/">Restart</a></button>
+    `
 };
 
 const renderQuestions = () => {
@@ -74,7 +77,7 @@ const renderQuestions = () => {
                 .map(
                     (answer: string, index: number) => `
                 <label>
-                    <input type="radio" name="answer" value="${index}">
+                    <input type="radio" name="answer" value="${index}" required>
                     ${answer}
                 </label>
             `
@@ -89,6 +92,14 @@ const renderQuestions = () => {
     const feedback = document.getElementById("feedback") as HTMLParagraphElement;
 
     submitBtn.addEventListener("click", () => {
+        const selectedRadioAnswer = Array.from(answerCollection).find((radio) => radio.checked);
+        if (!selectedRadioAnswer) {
+          feedback.textContent = "⛔";
+          return;
+      }
+
+        answerCollection.forEach(item => item.disabled = true);
+        submitBtn.disabled = true;
         const selectedAnswer = getSelectedValue(answerCollection);
 
         if (Number(selectedAnswer) === currentQuestion.correct) {
@@ -99,9 +110,16 @@ const renderQuestions = () => {
         }
 
         counterQuestions++;
-        showResult();
+
         setTimeout(() => {
+          if(counterQuestions === maxQuestions) {
+            questionContainer.style.display = "none"
+            showResult();
+
+            return;
+          }
             renderQuestions();
-        }, 3000);
+        }, 10);
     });
 };
+fetchAllData("easy")
