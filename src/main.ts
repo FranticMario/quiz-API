@@ -68,7 +68,7 @@ const showResult = () => {
 const renderQuestions = () => {
     const currentQuestion: IQuiz = questions[counterQuestions];
     questionContainer.innerHTML = `
-        <h2 id="question-title">${currentQuestion.question}</h2>
+        <h2 id="question-title">Frage ${counterQuestions + 1}: ${currentQuestion.question}</h2>
         <form id="answer-form">
             ${currentQuestion.answers
                 .map(
@@ -99,10 +99,8 @@ const renderQuestions = () => {
         }
 
         counterQuestions++;
+        showResult();
         setTimeout(() => {
-            if (counterQuestions === maxQuestions) {
-                return showResult();
-            }
             renderQuestions();
         }, 3000);
     });
