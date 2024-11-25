@@ -44,6 +44,7 @@ const handleChange = () => {
     const selectedLanguageValue = selectedLanguage;
     const selectedDifficulty = getSelectedValue(difficultyRadios);
     renderRadioBox(selectedLanguageValue);
+    console.log(selectedDifficulty)
     fetchAllData(selectedDifficulty);
 };
 
@@ -55,6 +56,7 @@ const fetchAllData = async (url: string) => {
     const response: Response = await fetch(newUrl);
     const data: IQuiz[] = await response.json();
     questions = [...data];
+    console.log(questions)
     maxQuestions = questions.length;
     renderQuestions();
 };
@@ -122,4 +124,4 @@ const renderQuestions = () => {
         }, 10);
     });
 };
-fetchAllData("easy")
+fetchAllData("leicht")
