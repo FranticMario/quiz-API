@@ -1,7 +1,5 @@
 import { IQuiz } from "./interfaces/IQuiz";
 
-
-
 const languageRadios = document.getElementsByName("language") as NodeListOf<HTMLInputElement>;
 const difficultyRadios = document.getElementsByName("difficulty") as NodeListOf<HTMLInputElement>;
 const BASE_URL = "https://vz-wd-24-01.github.io/typescript-quiz/questions/";
@@ -10,7 +8,12 @@ const labelHard = document.getElementById("label-hard") as HTMLInputElement;
 const questionContainer = document.getElementById("question-box") as HTMLDivElement;
 const answerCollection = document.getElementsByName("answer") as NodeListOf<HTMLInputElement>; 
 
-let question:IQuiz;
+let questions:IQuiz[] = [];
+let counterQuestions:number = 0;
+let counterTrueAnswer:number = 0;
+
+let maxQuestions:number = 0
+
 
 const getSelectedValue = (radios: NodeListOf<HTMLInputElement>) => {
   for (const radio of radios) {
@@ -51,21 +54,24 @@ languageRadios.forEach((radio) => radio.addEventListener("change", handleChange)
 const fetchAllData = async (url: string) => {
     const newUrl = `${BASE_URL + url + ".json"}`;
     const response: Response = await fetch(newUrl);
-    const data: IQuiz = await response.json();
-    console.log(data)
-    renderQuestions(data)
+    const data:IQuiz[] = await response.json();
+    questions = [...data];
+    maxQuestions = questions.length;
+    renderQuestions()
 };
 
+const showResult = () => {
+  
+}
 
-
-const renderQuestions = (questions: IQuiz) => {
-  console.log(question)
+const renderQuestions = () => {
+  const currentQuestion:IQuiz = questions[counterQuestions];
     questionContainer.innerHTML = `
-        <h2 id="question-title">${questions.question}</h2>
+        <h2 id="question-title">${currentQuestion.question}</h2>
         <form id="answer-form">
-            ${questions.answers
+            ${currentQuestion.answers
                 .map(
-                    (answer, index) => `
+                    (answer:string, index:number) => `
                 <label>
                     <input type="radio" name="answer" value="${index}">
                     ${answer}
@@ -83,11 +89,22 @@ const renderQuestions = (questions: IQuiz) => {
 
     submitBtn.addEventListener("click", () => {
         const selectedAnswer = getSelectedValue(answerCollection);
-
-        if (Number(selectedAnswer) === questions.correct) {
+   
+        if (Number(selectedAnswer) === currentQuestion.correct) {
             feedback.textContent = "✅";
+            counterTrueAnswer++
         } else {
             feedback.textContent = "❌";
         }
+
+
+        counterQuestions++
+        setTimeout(() => {
+          if(counterQuestions === maxQuestions) {
+            return showResult()
+          }
+          renderQuestions()
+        }, 3000)
     });
 };
+
