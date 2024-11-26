@@ -73,19 +73,21 @@ const showResult = () => {
     resultContainer.innerHTML = `
     <h2>Ergebnis</h2>
    <p id="total-result">${counterTrueAnswer}/${maxQuestions}</p>
-   <button><a href="/">Restart</a></button>
+   <button class="btn"><a href="/">Restart</a></button>
     `;
 };
 
 const renderQuestions = () => {
     const currentQuestion: IQuiz = questions[counterQuestions];
     questionContainer.innerHTML = `
-        <h2 id="question-title">Frage ${counterQuestions + 1}: ${currentQuestion.question}</h2>
-        <form id="answer-form">
+        <h2 class="question-title" id="question-title">Frage ${counterQuestions + 1}: ${
+        currentQuestion.question
+    }</h2>
+        <form class="options" id="answer-form">
             ${currentQuestion.answers
                 .map(
                     (answer: string, index: number) => `
-                <label>
+                <label class="option">
                     <input type="radio" name="answer" value="${index}" required>
                     ${answer}
                 </label>
@@ -96,6 +98,20 @@ const renderQuestions = () => {
         <button id="submit-btn" class="btn">Antwort überprüfen</button>
         <p id="feedback" class="result"></p>
     `;
+
+    const optionCollection = document.querySelectorAll(".option") as NodeListOf<HTMLLabelElement>;
+
+    optionCollection.forEach((option) => {
+        option.addEventListener("click", (e) => {
+            optionCollection.forEach((option) => {
+                if (option.classList.contains("tag-selected")) {
+                    option.classList.remove("tag-selected");
+                }
+            });
+            const eventTarger: any = e.currentTarget;
+            eventTarger.classList.add("tag-selected");
+        });
+    });
 
     const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement;
     const feedback = document.getElementById("feedback") as HTMLParagraphElement;
@@ -128,7 +144,34 @@ const renderQuestions = () => {
                 return;
             }
             renderQuestions();
-        }, 10);
+        }, 3000);
     });
 };
+
+const languageOptions = document.querySelectorAll(
+    'input[name="language"]'
+) as NodeListOf<HTMLInputElement>;
+
+const difficultyOptions = document.querySelectorAll(
+    'input[name="difficulty"]'
+) as NodeListOf<HTMLInputElement>;
+
+const handleOptionSelection = (options: NodeListOf<HTMLInputElement>, selectedClass: string) => {
+    options.forEach((option) => {
+        const label = option.parentElement;
+        if (!label) return;
+
+        label.addEventListener("click", () => {
+            options.forEach((opt) => {
+                const lbl = opt.parentElement;
+                lbl?.classList.remove(selectedClass);
+            });
+            label.classList.add(selectedClass);
+        });
+    });
+};
+
+handleOptionSelection(languageOptions, "tag-selected");
+handleOptionSelection(difficultyOptions, "tag-selected");
+
 fetchAllData("leicht");

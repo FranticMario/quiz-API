@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="./src/style.css" />
+        <link rel="stylesheet" href="./src/style2.css" />
         <title>Vite + TS</title>
     </head>
     <body>
@@ -14,21 +14,32 @@
             </div>
 
             <!-- Einstellungen -->
-            <div class="options">
-                <h3>Sprache</h3>
-                <label><input type="radio" name="language" value="de" checked /> Deutsch</label>
-                <label><input type="radio" name="language" value="en" /> Englisch</label>
+            <div class="options-setting">
+                <div>
+                    <div>
+                        <h3>Sprache</h3>
+                    </div>
+                    <label class="setting"
+                        ><input type="radio" name="language" value="de" checked /> Deutsch</label
+                    >
+                    <label class="setting"
+                        ><input type="radio" name="language" value="en" /> Englisch</label
+                    >
+                </div>
 
-                <h3>Schwierigkeitsgrad</h3>
-                <label
-                    ><input type="radio" name="difficulty" value="leicht" checked />
-                    <span id="label-easy">Leicht</span></label
-                >
-                <label
-                    ><input type="radio" name="difficulty" value="schwer" /><span id="label-hard"
-                        >Schwer</span
-                    ></label
-                >
+                <div>
+                    <h3>Schwierigkeitsgrad</h3>
+                    <label class="setting"
+                        ><input type="radio" name="difficulty" value="leicht" checked />
+                        <span id="label-easy">Leicht</span></label
+                    >
+                    <label class="setting"
+                        ><input type="radio" name="difficulty" value="schwer" /><span
+                            id="label-hard"
+                            >Schwer</span
+                        ></label
+                    >
+                </div>
             </div>
 
             <!-- Frage -->
@@ -45,9 +56,7 @@
             </div>
 
             <!-- Gesamtergebnis -->
-            <div class="result-container">
-               
-            </div>
+            <div class="result-container"></div>
         </div>
         <script type="module" src="/src/main.ts"></script>
     </body>
