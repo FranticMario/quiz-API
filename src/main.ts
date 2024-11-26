@@ -103,6 +103,7 @@ const renderQuestions = () => {
 
     optionCollection.forEach((option) => {
         option.addEventListener("click", (e) => {
+
             optionCollection.forEach((option) => {
                 if (option.classList.contains("tag-selected")) {
                     option.classList.remove("tag-selected");
@@ -171,7 +172,41 @@ const handleOptionSelection = (options: NodeListOf<HTMLInputElement>, selectedCl
     });
 };
 
+const setInitialSelection = () => {
+    const selectedLanguage = getSelectedValue(languageRadios);
+    const selectedDifficulty = getSelectedValue(difficultyRadios);
+
+    languageRadios.forEach((radio) => {
+        const label = radio.parentElement;
+        if (!label) return;
+        if (radio.value === selectedLanguage) {
+            label.classList.add("tag-selected");
+        } else {
+            label.classList.remove("tag-selected");
+        }
+    });
+
+    difficultyRadios.forEach((radio) => {
+        const label = radio.parentElement;
+        if (!label) return;
+        if (radio.value === selectedDifficulty) {
+            label.classList.add("tag-selected");
+        } else {
+            label.classList.remove("tag-selected");
+        }
+    });
+};
+
 handleOptionSelection(languageOptions, "tag-selected");
 handleOptionSelection(difficultyOptions, "tag-selected");
 
-fetchAllData("leicht");
+document.addEventListener("DOMContentLoaded", () => {
+    
+    setInitialSelection();
+
+ 
+    renderRadioBox(getSelectedValue(languageRadios));
+
+ 
+    fetchAllData(getSelectedValue(difficultyRadios));
+});
